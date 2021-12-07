@@ -16,7 +16,7 @@ class WfScraper:
     def __init__(self) -> None:
         self.user_agent = user_agent.generate_user_agent()
         self.URL_ALL_WATCHES = r"https://www.watchfinder.co.uk/all-watches?orderby=BestMatch&pageno="
-        self.URL_FIRST_PAGE = r"https://www.watchfinder.co.uk/all-watches?orderby=BestMatch&pageno=1"
+        self.URL_FIRST_PAGE = self.URL_ALL_WATCHES + "1"
         self.URL_BASE = r"https://www.watchfinder.co.uk"
         self.url_list = []
         create_db_and_tables()

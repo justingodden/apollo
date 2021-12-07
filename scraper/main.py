@@ -1,4 +1,4 @@
-from scraper import WfScraper, PageParser
+from scraper import WfScraper
 
 
 def main():
