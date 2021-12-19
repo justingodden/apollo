@@ -97,7 +97,7 @@ class Embedder:
                   y_train.to_numpy(),
                   validation_data=((brand_test_tokens, series_test_tokens),
                                    y_test.to_numpy()),
-                  epochs=30,
+                  epochs=3000,
                   callbacks=[early_stopping],
                   verbose=2)
 
