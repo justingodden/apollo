@@ -10,8 +10,6 @@ def main() -> None:
 
     df = get_data()
     X, y = df.drop("price", axis=1), df["price"]
-    X["box"] = X["box"].map({True: 1, False: 0})
-    X["papers"] = X["papers"].map({True: 1, False: 0})
     X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.10, random_state=42)
 
     embedder.create_embeddings(X,
