@@ -10,4 +10,6 @@ def get_data() -> pd.DataFrame:
         'brand': 'category',
         'series': 'category',
     })
+    df["box"] = df["box"].map({True: 1, False: 0})
+    df["papers"] = df["papers"].map({True: 1, False: 0})
     return df
