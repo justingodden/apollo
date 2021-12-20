@@ -7,8 +7,8 @@ from lightgbm import log_evaluation
 import optuna.integration.lightgbm as lgb_tuner
 
 
-def fit_model(X_train: pd.DataFrame, y_train: pd.Series):
-    dtrain = lgb_tuner.Dataset(X_train, label=y_train)
+def fit_model(X: pd.DataFrame, y: pd.Series):
+    dtrain = lgb_tuner.Dataset(X, label=y)
 
     params = {
         "objective": "regression",
@@ -34,6 +34,6 @@ def fit_model(X_train: pd.DataFrame, y_train: pd.Series):
     if not os.path.exists(output_path):
         os.mkdir(output_path)
     model.save_model(os.path.join(output_path, "lgb_model.txt"))
-    best_score_rmse = tuner.best_score**0.5
+    # best_score_rmse = tuner.best_score**0.5
     # best_params = tuner.best_params
     # print(best_score_rmse)
