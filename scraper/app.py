@@ -1,3 +1,5 @@
+import sys
+
 from scraper import WfScraper
 
 
