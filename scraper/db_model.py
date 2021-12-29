@@ -2,6 +2,8 @@ from typing import Optional
 
 from sqlmodel import Field, Session, SQLModel, create_engine, select
 
+from secret import get_secret
+
 
 class Watch(SQLModel, table=True):
     id: Optional[int] = Field(default=None, primary_key=True)
@@ -18,10 +20,9 @@ class Watch(SQLModel, table=True):
     image_filename: str
 
 
-sqlite_file_name = "database.db"
-sqlite_url = f"sqlite:///{sqlite_file_name}"
+sql_uri = get_secret()
 
-engine = create_engine(sqlite_url, echo=False)
+engine = create_engine(sql_uri, echo=False)
 
 
 def create_db_and_tables() -> None:
