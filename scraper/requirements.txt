@@ -1,0 +1,7 @@
+requests
+beautifulsoup4
+pandas
+user_agent
+sqlmodel
+boto3
+sqlalchemy
