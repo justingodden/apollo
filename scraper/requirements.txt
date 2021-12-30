@@ -5,3 +5,5 @@ user_agent
 sqlmodel
 boto3
 sqlalchemy
+mysql-connector-python
+lxml
