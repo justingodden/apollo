@@ -1,8 +1,10 @@
-import sys
-
 from scraper import WfScraper
 
 
-def handler(event, context):
+def main():
     scraper = WfScraper()
     scraper.scrape_all_pages()
+
+
+if __name__ == "__main__":
+    main()
