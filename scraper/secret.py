@@ -18,11 +18,12 @@ def get_secret() -> URL:
     get_secret_value_response = client.get_secret_value(
         SecretId=secret_name
     )
+
     secret = get_secret_value_response['SecretString']
     connection_settings = json.loads(secret)
 
     connection_uri = URL.create(
-        drivername=connection_settings["engine"],
+        drivername="mysql+mysqlconnector",
         host=connection_settings["host"],
         port=connection_settings["port"],
         database=connection_settings["dbname"],
