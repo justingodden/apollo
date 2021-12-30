@@ -41,7 +41,7 @@ class WfScraper:
         total_pages = self.get_total_pages()
         for page in range(1, total_pages+1):
             self.url_list += self.get_single_page_urls(self.URL_ALL_WATCHES + str(page))
-            print(f"{page}/{total_pages} url pages scraped...", end="\r")
+            print(f"{page}/{total_pages} url pages scraped...")
         return self.url_list
 
     def scrape_single_page(self, url: str) -> None:
@@ -70,7 +70,7 @@ class WfScraper:
         print("\nScraping all product pages.")
         for i, url in enumerate(self.url_list):
             self.scrape_single_page(url)
-            print(f"{i+1}/{len(self.url_list)} products scraped...", end="\r")
+            print(f"{i+1}/{len(self.url_list)} products scraped...")
 
 
 class PageParser:
