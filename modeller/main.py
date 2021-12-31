@@ -20,11 +20,6 @@ def main() -> None:
 
     X = X.join(embedder.generate_features(X["brand"],
                                           X["series"])).drop(["brand", "series"], axis=1)
-    # X_train = X_train.join(embedder.generate_features(X_train["brand"],
-    #                                                   X_train["series"])).drop(["brand", "series"], axis=1)
-    # X_test = X_test.join(embedder.generate_features(X_test["brand"],
-    #                                                 X_test["series"])).drop(["brand", "series"], axis=1)
-
     create_model.fit_model(X, y)
 
 
