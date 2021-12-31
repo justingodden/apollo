@@ -84,7 +84,7 @@ def predict(watch: Watch) -> float:
 
 
 def main() -> None:
-    uvicorn.run("api:app")
+    uvicorn.run("api:app", port=5000)
 
 
 if __name__ == "__main__":
