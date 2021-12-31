@@ -1,10 +1,13 @@
 import pandas as pd
+from sqlalchemy import create_engine
+
+from secret import get_secret
 
 
 def get_data() -> pd.DataFrame:
-    sqlite_file_name = "../scraper/database.db"
-    sqlite_url = f"sqlite:///{sqlite_file_name}"
-    df = pd.read_sql_table('watch', sqlite_url)
+    mysql_url = get_secret()
+    engine = create_engine(mysql_url)
+    df = pd.read_sql_table('watch', con=engine)
     df.drop(['id', 'model_num', 'model_id', 'product_url', 'image_url', 'image_filename'], axis=1, inplace=True)
     df = df.astype({
         'brand': 'category',
