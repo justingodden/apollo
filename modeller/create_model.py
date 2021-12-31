@@ -6,8 +6,10 @@ from lightgbm import early_stopping
 from lightgbm import log_evaluation
 import optuna.integration.lightgbm as lgb_tuner
 
+import s3
 
-def fit_model(X: pd.DataFrame, y: pd.Series):
+
+def fit_model(X: pd.DataFrame, y: pd.Series) -> None:
     dtrain = lgb_tuner.Dataset(X, label=y)
 
     params = {
@@ -21,8 +23,7 @@ def fit_model(X: pd.DataFrame, y: pd.Series):
                                       num_boost_round=3000,
                                       folds=KFold(n_splits=5),
                                       callbacks=[early_stopping(100),
-                                                 log_evaluation(100)
-                                                 ],
+                                                 log_evaluation(100)],
                                       return_cvbooster=True
                                       )
 
@@ -33,7 +34,7 @@ def fit_model(X: pd.DataFrame, y: pd.Series):
     output_path = os.path.join(os.getcwd(), "output")
     if not os.path.exists(output_path):
         os.mkdir(output_path)
-    model.save_model(os.path.join(output_path, "lgb_model.txt"))
-    # best_score_rmse = tuner.best_score**0.5
-    # best_params = tuner.best_params
-    # print(best_score_rmse)
+    file_name = "lgb_model.txt"
+    file_path = os.path.join(output_path, file_name)
+    model.save_model(file_path)
+    s3.upload_file(file_path=file_path, key_name=file_name)

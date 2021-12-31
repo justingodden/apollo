@@ -9,6 +9,7 @@ from tensorflow.keras.preprocessing.text import Tokenizer
 from tensorflow.keras.layers import Embedding
 from tensorflow.keras.callbacks import EarlyStopping
 
+import s3
 from utils import rm_spaces
 
 
@@ -37,8 +38,12 @@ class Embedder:
         tokenizer.fit_on_texts(series.apply(lambda x: rm_spaces(x)))
         self.num_brand = len(tokenizer.word_index)
         self.brand_tokenizer = tokenizer
-        with open(os.path.join(self.output_path, 'tokenizer_brand.pkl'), 'wb') as handle:
+
+        file_name = "tokenizer_brand.pkl"
+        file_path = os.path.join(self.output_path, file_name)
+        with open(file_path, "wb") as handle:
             pickle.dump(tokenizer, handle, protocol=pickle.HIGHEST_PROTOCOL)
+        s3.upload_file(file_path=file_path, key_name=file_name)
 
     def get_brand_tokens(self, series: pd.Series) -> tf.Tensor:
         if self.brand_tokenizer is None:
@@ -52,8 +57,12 @@ class Embedder:
         tokenizer.fit_on_texts(series.apply(lambda x: rm_spaces(x)))
         self.num_series = len(tokenizer.word_index)
         self.series_tokenizer = tokenizer
-        with open(os.path.join(self.output_path, 'tokenizer_series.pkl'), 'wb') as handle:
+
+        file_name = "tokenizer_series.pkl"
+        file_path = os.path.join(self.output_path, file_name)
+        with open(file_path, "wb") as handle:
             pickle.dump(tokenizer, handle, protocol=pickle.HIGHEST_PROTOCOL)
+        s3.upload_file(file_path=file_path, key_name=file_name)
 
     def get_series_tokens(self, series: pd.Series) -> tf.Tensor:
         if self.series_tokenizer is None:
@@ -78,7 +87,7 @@ class Embedder:
         model = tf.keras.Model(inputs=[input_brand, input_series],
                                outputs=output)
         model.compile(loss='mean_squared_error',
-                      optimizer=tf.keras.optimizers.Adam(lr=3e-4),
+                      optimizer=tf.keras.optimizers.Adam(learning_rate=3e-4),
                       metrics=[tf.keras.metrics.RootMeanSquaredError()])
 
         return model
@@ -114,15 +123,21 @@ class Embedder:
             tf.keras.layers.InputLayer(input_shape=[1, ]),
             self.embedding_layer_brand
         ])
-        feature_generator_brand.save(os.path.join(self.output_path, 'feature_generator_brand'))
         self.feature_generator_brand = feature_generator_brand
+        file_name = "feature_generator_brand.h5"
+        file_path = os.path.join(self.output_path, file_name)
+        feature_generator_brand.save(file_path)
+        s3.upload_file(file_path=file_path, key_name=file_name)
 
         feature_generator_series = tf.keras.models.Sequential([
             tf.keras.layers.InputLayer(input_shape=[1, ]),
             self.embedding_layer_series
         ])
-        feature_generator_series.save(os.path.join(self.output_path, 'feature_generator_series'))
         self.feature_generator_series = feature_generator_series
+        file_name = "feature_generator_series.h5"
+        file_path = os.path.join(self.output_path, file_name)
+        feature_generator_series.save(file_path)
+        s3.upload_file(file_path=file_path, key_name=file_name)
 
     def generate_features(self, brand: pd.Series, series: pd.Series) -> pd.DataFrame:
         if self.feature_generator_brand is None or self.feature_generator_series is None:
