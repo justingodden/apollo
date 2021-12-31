@@ -4,14 +4,19 @@ import os
 import pandas as pd
 from pydantic import BaseModel
 from fastapi import FastAPI
+from fastapi.responses import HTMLResponse
 import uvicorn
-
 
 from feature_engineering import FeatureEngineering
 from predictor import Predictor
+import s3
 
-
-BASE_DIR = os.path.join(os.path.dirname(os.getcwd()), "modeller", "output")
+output_path = os.path.join(os.getcwd(), "output")
+brand_tokenizer_filename = "tokenizer_brand.pkl"
+series_tokenizer_filename = "tokenizer_series.pkl"
+brand_embedding_model_name = "feature_generator_brand.h5"
+series_embedding_model_name = "feature_generator_series.h5"
+lgb_model_filename = "lgb_model.txt"
 
 
 class Watch(BaseModel):
@@ -24,28 +29,47 @@ class Watch(BaseModel):
 
 app = FastAPI()
 
-feature_engineering = FeatureEngineering(base_dir=BASE_DIR,
-                                         brand_tokenizer_filename="tokenizer_brand.pkl",
-                                         series_tokenizer_filename="tokenizer_series.pkl",
-                                         brand_embedding_model_name="feature_generator_brand",
-                                         series_embedding_model_name="feature_generator_series"
+
+def download_all() -> None:
+    if not os.path.exists(output_path):
+        os.mkdir(output_path)
+    s3.download_file(file_path=os.path.join(output_path, brand_tokenizer_filename),
+                     key_name=brand_tokenizer_filename)
+    s3.download_file(file_path=os.path.join(output_path, series_tokenizer_filename),
+                     key_name=series_tokenizer_filename)
+    s3.download_file(file_path=os.path.join(output_path, brand_embedding_model_name),
+                     key_name=brand_embedding_model_name)
+    s3.download_file(file_path=os.path.join(output_path, series_embedding_model_name),
+                     key_name=series_embedding_model_name)
+    s3.download_file(file_path=os.path.join(output_path, lgb_model_filename),
+                     key_name=lgb_model_filename)
+
+
+download_all()
+
+feature_engineering = FeatureEngineering(base_dir=output_path,
+                                         brand_tokenizer_filename=brand_tokenizer_filename,
+                                         series_tokenizer_filename=series_tokenizer_filename,
+                                         brand_embedding_model_name=brand_embedding_model_name,
+                                         series_embedding_model_name=series_embedding_model_name
                                          )
-predictor = Predictor(base_dir=BASE_DIR,
-                      filename="lgb_model.txt")
+predictor = Predictor(base_dir=output_path,
+                      filename=lgb_model_filename)
 
 
 @app.get("/")
-def root():
-    return f"""
+def root() -> HTMLResponse:
+    html_content = f"""
     <html>
         <head>
             <title>Apollo - The Watch Pricing Specialist</title>
         </head>
         <body>
-            <p>&copy; Apollo {datetime.datetime.utcnow().year} v.3000.04</p>
+            <p>&copy; Apollo {datetime.datetime.utcnow().year} v.0.0.1</p>
         </body>
     </html>
-    """.replace("\n", "")
+    """
+    return HTMLResponse(content=html_content, status_code=200)
 
 
 @app.get("/predict")
@@ -59,7 +83,7 @@ def predict(watch: Watch) -> float:
     return predictor.predict(watch_df)
 
 
-def main():
+def main() -> None:
     uvicorn.run("api:app")
 
 
