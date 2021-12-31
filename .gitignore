@@ -5,3 +5,4 @@ __pycache__/
 *.db
 *.h5
 modeller/output/
+inference/output/
