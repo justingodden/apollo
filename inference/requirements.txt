@@ -1,0 +1,8 @@
+tensorflow
+numpy
+pandas
+boto3
+pydantic
+fastapi
+uvicorn
+lightgbm

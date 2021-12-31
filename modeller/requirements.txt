@@ -1,0 +1,8 @@
+pandas
+scikit-learn
+lightgbm
+optuna
+boto3
+sqlalchemy
+numpy
+tensorflow
