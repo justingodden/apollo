@@ -1,6 +1,7 @@
 import os
 
 import lightgbm
+from pandas import DataFrame
 
 
 class Predictor:
@@ -8,5 +9,5 @@ class Predictor:
         path = os.path.join(base_dir, filename)
         self.model = lightgbm.Booster(model_file=path)
 
-    def predict(self, df) -> float:
+    def predict(self, df: DataFrame) -> float:
         return self.model.predict(df)[0]
