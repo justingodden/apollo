@@ -6,3 +6,4 @@ __pycache__/
 *.h5
 modeller/output/
 inference/output/
+application/
