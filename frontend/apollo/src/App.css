@@ -1,0 +1,36 @@
+.App {
+  text-align: center;
+}
+
+.App-background {
+  background: linear-gradient(45deg, #143a49, hsl(327, 100%, 69%));
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  font-size: calc(10px + 2vmin);
+  color: rgb(0, 0, 0);
+}
+
+.Main-container {
+  height: 550px;
+  width: 400px;
+  background-color: #e9e9e95d;
+  border-radius: 10px;
+  box-shadow: 5px 5px 15px 5px #00000027;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  border-top: 1px solid rgba(255, 255, 255, 0.7);
+  border-left: 1px solid rgba(255,255,255,0.7);
+}
+
+.Input-box {
+  margin: 10px;
+}
+
+.Form-group {
+  margin-bottom: 25px;
+}
