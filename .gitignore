@@ -6,4 +6,10 @@ __pycache__/
 *.h5
 modeller/output/
 inference/output/
-application/
+notes.md
+
+frontend/apollo/node_modules
+frontend/apollo/.DS_Store
+frontend/apollo/dist
+frontend/apollo/dist-ssr
+frontend/apollo/*.local
