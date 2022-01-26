@@ -5,11 +5,13 @@ import pandas as pd
 from pydantic import BaseModel
 from fastapi import FastAPI
 from fastapi.responses import HTMLResponse
+from fastapi.middleware.cors import CORSMiddleware
 import uvicorn
 
 from feature_engineering import FeatureEngineering
 from predictor import Predictor
 import s3
+import database
 
 output_path = os.path.join(os.getcwd(), "output")
 brand_tokenizer_filename = "tokenizer_brand.pkl"
@@ -28,6 +30,17 @@ class Watch(BaseModel):
 
 
 app = FastAPI()
+
+origins = [
+    "http://localhost:3000",
+]
+app.add_middleware(
+    CORSMiddleware,
+    allow_origins=origins,
+    allow_credentials=True,
+    allow_methods=["GET", "POST"],
+    allow_headers=["*"],
+)
 
 
 def download_all() -> None:
@@ -57,6 +70,11 @@ predictor = Predictor(base_dir=output_path,
                       filename=lgb_model_filename)
 
 
+@app.get("/brand-and-series.json")
+def brand_and_series() -> dict:
+    return database.get_brand_and_series()
+
+
 @app.get("/")
 def root() -> HTMLResponse:
     html_content = f"""
@@ -72,7 +90,7 @@ def root() -> HTMLResponse:
     return HTMLResponse(content=html_content, status_code=200)
 
 
-@app.get("/predict")
+@app.post("/predict")
 def predict(watch: Watch) -> float:
     watch_df = pd.DataFrame(watch.dict(), index=[0])
     watch_df = watch_df.join(feature_engineering.generate_features(watch_df["brand"],
@@ -80,11 +98,12 @@ def predict(watch: Watch) -> float:
                                                                                              axis=1)
     watch_df["box"] = watch_df["box"].map({True: 1, False: 0})
     watch_df["papers"] = watch_df["papers"].map({True: 1, False: 0})
-    return predictor.predict(watch_df)
+    pred = predictor.predict(watch_df)
+    return round(pred)
 
 
 def main() -> None:
-    uvicorn.run("api:app", port=5000)
+    uvicorn.run("api:app", port=5000, reload=True)
 
 
 if __name__ == "__main__":
