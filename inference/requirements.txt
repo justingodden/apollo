@@ -1,4 +1,6 @@
 tensorflow
+sqlmodel
+sqlalchemy
 numpy
 pandas
 boto3
