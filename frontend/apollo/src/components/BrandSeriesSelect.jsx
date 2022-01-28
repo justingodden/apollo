@@ -28,7 +28,7 @@ export default function BrandSeriesSelect() {
 
     useEffect(() => {
         async function fetchData() {
-            const response = await fetch('http://127.0.0.1:5000/brand-and-series.json')
+            const response = await fetch(import.meta.env.VITE_API_DNS + 'brand-and-series.json')
             const data = await response.json()
             setApiData(data)
             setBrands(Object.keys(data))

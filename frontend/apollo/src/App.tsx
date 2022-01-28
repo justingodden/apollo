@@ -14,7 +14,7 @@ function App() {
 
   async function handleClick() {
     setLoading(true)
-    const response = await fetch('http://localhost:5000/predict', {
+    const response = await fetch(import.meta.env.VITE_API_DNS + 'predict', {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json'
