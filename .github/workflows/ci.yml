@@ -118,7 +118,7 @@ jobs:
     runs-on: ubuntu-latest
     defaults:
         run:
-          working-directory: application/apollo
+          working-directory: frontend/apollo
     
     steps:
     - name: Checkout
