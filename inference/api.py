@@ -12,6 +12,8 @@ from predictor import Predictor
 import s3
 import database
 
+os.chdir("/tmp")
+
 output_path = os.path.join(os.getcwd(), "output")
 brand_tokenizer_filename = "tokenizer_brand.pkl"
 series_tokenizer_filename = "tokenizer_series.pkl"
