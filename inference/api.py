@@ -5,8 +5,7 @@ import pandas as pd
 from pydantic import BaseModel
 from fastapi import FastAPI
 from fastapi.responses import HTMLResponse
-from fastapi.middleware.cors import CORSMiddleware
-import uvicorn
+from mangum import Mangum
 
 from feature_engineering import FeatureEngineering
 from predictor import Predictor
@@ -30,17 +29,6 @@ class Watch(BaseModel):
 
 
 app = FastAPI()
-
-origins = [
-    "http://localhost:3000",
-]
-app.add_middleware(
-    CORSMiddleware,
-    allow_origins=origins,
-    allow_credentials=True,
-    allow_methods=["GET", "POST"],
-    allow_headers=["*"],
-)
 
 
 def download_all() -> None:
@@ -102,9 +90,4 @@ def predict(watch: Watch) -> float:
     return round(pred)
 
 
-def main() -> None:
-    uvicorn.run("api:app", port=5000, reload=True)
-
-
-if __name__ == "__main__":
-    main()
+handler = Mangum(app)
