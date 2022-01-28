@@ -113,3 +113,25 @@ jobs:
           echo "Pushing image to ECR..."
           docker push $ECR_REGISTRY/$ECR_REPOSITORY:$IMAGE_TAG
           echo "::set-output name=image::$ECR_REGISTRY/$ECR_REPOSITORY:$IMAGE_TAG"
+
+  application:
+  runs-on: ubuntu-latest
+  defaults:
+      run:
+        working-directory: application/apollo
+  
+  steps:
+  - name: Checkout
+    uses: actions/checkout@v2
+  
+  - name: Build static files
+    run: npm run build
+
+  - name: Upload static files to S3
+    uses: shallwefootball/s3-upload-action@master
+      with:
+        aws_key_id: ${{ secrets.ACCESS_KEY_ID }}
+        aws_secret_access_key: ${{ secrets.SECRET_ACCESS_KEY}}
+        aws_bucket: apollo-watch-pricer
+        source_dir: 'dist'
+        destination_dir: ''
