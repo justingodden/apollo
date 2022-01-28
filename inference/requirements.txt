@@ -1,5 +1,6 @@
 tensorflow
 sqlmodel
+mysql-connector-python
 sqlalchemy
 numpy
 pandas
