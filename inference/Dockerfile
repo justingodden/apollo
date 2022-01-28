@@ -4,7 +4,7 @@ COPY . ${LAMBDA_TASK_ROOT}
 
 COPY requirements.txt  .
 
-RUN apt-get install libgomp1
+RUN yum install libgomp
 
 RUN  pip3 install -r requirements.txt --target "${LAMBDA_TASK_ROOT}"
 
