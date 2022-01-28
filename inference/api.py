@@ -12,6 +12,7 @@ from predictor import Predictor
 import s3
 import database
 
+# required for lambda file structure
 os.chdir("/tmp")
 
 output_path = os.path.join(os.getcwd(), "output")
