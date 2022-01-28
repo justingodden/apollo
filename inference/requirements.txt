@@ -8,5 +8,5 @@ boto3
 pydantic
 fastapi
 uvicorn
-mangum
+mangum==0.11
 lightgbm
