@@ -5,6 +5,12 @@ terraform {
       version = "~> 3.0"
     }
   }
+
+  backend "s3" {
+    bucket = "jg-s3-terraform-state-files"
+    key    = "apollo-stage-1/terraform.tfstate"
+    region = "us-east-1"
+  }
 }
 
 # Configure the AWS Provider
