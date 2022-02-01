@@ -17,8 +17,8 @@ resource "aws_db_instance" "rds-mysql" {
   engine_version       = "8.0"
   instance_class       = "db.t2.micro"
   db_subnet_group_name = aws_db_subnet_group.apollo-subnet-group.name
-  username             = var.rds-secrets["username"]
-  password             = var.rds-secrets["password"]
+  username             = "admin"
+  password             = random_password.password.result
   publicly_accessible  = true
   skip_final_snapshot  = true
 }
@@ -29,6 +29,15 @@ resource "aws_secretsmanager_secret" "apollo-secrets-manager" {
 }
 
 resource "aws_secretsmanager_secret_version" "apollo-secrets" {
-  secret_id     = aws_secretsmanager_secret.apollo-secrets-manager.id
-  secret_string = jsonencode(var.rds-secrets)
+  secret_id = aws_secretsmanager_secret.apollo-secrets-manager.id
+  secret_string = jsonencode({
+    username : "admin",
+    password : random_password.password.result
+  })
+}
+
+resource "random_password" "password" {
+  length           = 16
+  special          = true
+  override_special = "_%@"
 }
