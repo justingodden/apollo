@@ -6,6 +6,8 @@ on:
     types:
       - completed
       
+  workflow_dispatch:
+
 jobs:
   scraper:
     runs-on: ubuntu-latest
