@@ -24,7 +24,7 @@ resource "aws_db_instance" "rds-mysql" {
 }
 
 resource "aws_secretsmanager_secret" "apollo-secrets-manager" {
-  name        = "apollo-rds-secret-test1"
+  name        = "apollo-rds-secret-test2"
   description = "Access to MySql db for Apollo project"
 }
 
