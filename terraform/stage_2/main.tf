@@ -19,5 +19,6 @@ provider "aws" {
 }
 
 module "scraper" {
-  source = "./scraper"
+  source     = "./scraper"
+  subnet_ids = [aws_subnet.apollo-public-subnet-1.id, aws_subnet.apollo-public-subnet-2.id]
 }
