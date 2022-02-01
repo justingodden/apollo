@@ -16,6 +16,5 @@ frontend/apollo/*.local
 
 **/.terraform
 *.lock.hcl
-**/variables.tf
 *.tfstate
 *.tfstate.backup
