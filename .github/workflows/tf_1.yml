@@ -27,7 +27,7 @@ jobs:
       with:
         aws-region: us-east-1
         aws-access-key-id: ${{ secrets.ACCESS_KEY_ID }}
-        aws-secret-access-key: ${{ secrets.ECRET_ACCESS_KEY }}
+        aws-secret-access-key: ${{ secrets.SECRET_ACCESS_KEY }}
     
     - name: Terraform Format
       id: fmt
