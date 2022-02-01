@@ -19,5 +19,3 @@ frontend/apollo/*.local
 **/variables.tf
 *.tfstate
 *.tfstate.backup
-
-**/temp.yml
