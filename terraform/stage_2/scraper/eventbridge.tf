@@ -18,6 +18,21 @@ resource "aws_iam_role" "ecs_events-role" {
   )
 }
 
+## for step functions
+# {
+#     "Version": "2012-10-17",
+#     "Statement": [
+#         {
+#             "Effect": "Allow",
+#             "Action": [
+#                 "states:StartExecution"
+#             ],
+#             "Resource": [
+#                 "arn:aws:states:us-east-1:005165627580:stateMachine:MyStateMachine"
+#             ]
+#         }
+#     ]
+# }
 resource "aws_iam_role_policy" "ecs_events_run_task_with_any_role" {
   name = "ecs_events_run_task_with_any_role"
   role = aws_iam_role.ecs_events-role.id
